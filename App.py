@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session, g
 import os
+from datetime import timedelta
 from conexion import Conexion
 from werkzeug.security import generate_password_hash as genph  # Para encriptar la contraseña
 from werkzeug.security import check_password_hash as checkph # para desencriptar la contraseña
@@ -45,6 +46,10 @@ def before_request():
 
     if 'user' in session: # Verificar si hay algun usuario con sesion activa
         g.user=session['user'] # Asignar el nombre del usuario a la variable global
+        
+        # Definir 20 minutos de inactividad para que la sesion cierre
+        session.permanent=True
+        app.permanent_session_lifetime = timedelta(minutes=20) 
 
 
 ##====================CERRAR SESION =============================
